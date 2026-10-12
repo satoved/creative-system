@@ -13,7 +13,7 @@ export const maxDuration = 120;
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const k = (s: string) => (s ?? "").trim().toLowerCase();
-const eur = (n: number | null) => (n == null ? "—" : `€${n.toFixed(1)}`);
+const eur = (n: number | null) => (n == null ? "—" : `$${n.toFixed(1)}`);
 
 export async function POST(req: NextRequest) {
   const { reportId } = await req.json().catch(() => ({})) as { reportId?: string };

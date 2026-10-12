@@ -330,7 +330,7 @@ function WeekSummary({ report, note, busy, onGenerate, onNoteChange, onNoteSave,
   const bot = [...withCpl].sort((a, b) => b.cpl! - a.cpl!).slice(0, 3);
   const miniLine = (r: WeeklyCreativeRow, color: string) => (
     <div key={r.adId} style={{ fontSize: 12, color: "#BBB", padding: "2px 0" }}>
-      <span style={{ color, fontWeight: 700 }}>€{fmt(r.cpl)}</span> · {r.adName} <span style={{ color: "#666" }}>({r.leads} лид., hook {r.hookRate == null ? "—" : Math.round(r.hookRate) + "%"})</span>
+      <span style={{ color, fontWeight: 700 }}>${fmt(r.cpl)}</span> · {r.adName} <span style={{ color: "#666" }}>({r.leads} лид., hook {r.hookRate == null ? "—" : Math.round(r.hookRate) + "%"})</span>
     </div>
   );
 
@@ -340,11 +340,11 @@ function WeekSummary({ report, note, busy, onGenerate, onNoteChange, onNoteSave,
 
       {/* Объективный блок (в коде) */}
       <div style={{ display: "flex", gap: 20, flexWrap: "wrap", margin: "8px 0 16px" }}>
-        <Stat label="Спенд" value={`€${int(Math.round(spend))}`} />
+        <Stat label="Спенд" value={`$${int(Math.round(spend))}`} />
         <Stat label="Лиды" value={int(leads)} color="#6EC8A0" />
         <Stat label="Квал" value={int(qual)} color="#6EC8A0" />
-        <Stat label="Blended CPL" value={cpl == null ? "—" : `€${fmt(cpl)}`} color={cpl != null && cpl <= 20 ? "#6EC8A0" : "#D96B6B"} />
-        <Stat label="Blended CPQL" value={cpql == null ? "—" : `€${fmt(cpql)}`} color={cpql != null && cpql <= 28 ? "#6EC8A0" : "#D96B6B"} />
+        <Stat label="Blended CPL" value={cpl == null ? "—" : `$${fmt(cpl)}`} color={cpl != null && cpl <= 20 ? "#6EC8A0" : "#D96B6B"} />
+        <Stat label="Blended CPQL" value={cpql == null ? "—" : `$${fmt(cpql)}`} color={cpql != null && cpql <= 28 ? "#6EC8A0" : "#D96B6B"} />
         <Stat label="Winner / Loser / Test" value={`${counts.winner ?? 0} / ${counts.loser ?? 0} / ${counts.testing ?? 0}`} />
       </div>
 
@@ -471,17 +471,17 @@ function CreativeCard({ row, note, onNoteChange, onSave, onGenAI, params, params
         <div style={{ flex: "1 1 260px", minWidth: 260 }}>
           <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>{row.adName}</div>
           <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "2px 0" }}>
-            <M l="Spend" v={`€${fmt(row.spend)}`} />
+            <M l="Spend" v={`$${fmt(row.spend)}`} />
             <M l="Impressions" v={int(row.impressions)} />
-            <M l="CPM" v={`€${fmt(row.cpm)}`} />
+            <M l="CPM" v={`$${fmt(row.cpm)}`} />
             <M l="Clicks" v={int(row.clicks)} />
-            <M l="CPC" v={`€${fmt(row.cpc)}`} />
+            <M l="CPC" v={`$${fmt(row.cpc)}`} />
             <M l="CTR" v={`${fmt(row.ctr)}%`} />
             <M l="CR Click/Lead" v={`${fmt(row.crClickLead)}%`} />
             <M l="Leads" v={int(row.leads)} />
-            <M l="CPL" v={`€${fmt(row.cpl)}`} highlight={row.cpl != null && row.cpl <= 20 ? "#6EC8A0" : row.cpl != null ? "#D96B6B" : undefined} />
+            <M l="CPL" v={`$${fmt(row.cpl)}`} highlight={row.cpl != null && row.cpl <= 20 ? "#6EC8A0" : row.cpl != null ? "#D96B6B" : undefined} />
             <M l="Qual Leads" v={int(row.qualLeads)} />
-            <M l="CPQL" v={`€${fmt(row.cpql)}`} highlight={row.cpql != null && row.cpql <= 28 ? "#6EC8A0" : row.cpql != null ? "#D96B6B" : undefined} />
+            <M l="CPQL" v={`$${fmt(row.cpql)}`} highlight={row.cpql != null && row.cpql <= 28 ? "#6EC8A0" : row.cpql != null ? "#D96B6B" : undefined} />
             <M l="Hook Rate" v={row.hookRate == null ? "—" : `${fmt(row.hookRate, 1)}% ${band.label}`} highlight={band.color} />
             <M l="Hold Rate" v={row.holdRate == null ? "—" : `${fmt(row.holdRate, 1)}%`} />
           </div>

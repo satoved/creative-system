@@ -28,7 +28,7 @@ export async function runAlertCheck(): Promise<{ created: number; dismissed: num
   const last2 = allDates.slice(0, 2);
   if (last2.length < 2) return { created: 0, dismissed: 0 };
 
-  // Active ads = spent > €1 on BOTH of the last 2 days
+  // Active ads = spent > $1 on BOTH of the last 2 days
   const [{ data: day0Rows }, { data: day1Rows }] = await Promise.all([
     supabase.from("meta_ads").select("ad_id").eq("date", last2[0]).gt("spend", 1),
     supabase.from("meta_ads").select("ad_id").eq("date", last2[1]).gt("spend", 1),
@@ -45,7 +45,7 @@ export async function runAlertCheck(): Promise<{ created: number; dismissed: num
     .in("ad_id", activeIds);
 
   const loserIds = new Set((perfRows ?? []).filter(r => r.auto_status === "loser").map(r => r.ad_id as string));
-  // Fake winners qualifying for alert: порог из app_settings (по умолчанию €50).
+  // Fake winners qualifying for alert: порог из app_settings (по умолчанию $50).
   const FAKE_WINNER_SPEND_FLOOR = settings.fakeWinnerAlertSpendFloor;
   const fakeWinnerRows = (perfRows ?? []).filter(
     r => r.auto_status === "fake_winner" && (r.spend as number ?? 0) >= FAKE_WINNER_SPEND_FLOOR
@@ -99,17 +99,17 @@ export async function runAlertCheck(): Promise<{ created: number; dismissed: num
     if (existing) continue;
 
     const metricStr = cpl && cpql
-      ? `CPL €${cpl.toFixed(1)}, CPQL €${cpql.toFixed(1)}`
+      ? `CPL $${cpl.toFixed(1)}, CPQL $${cpql.toFixed(1)}`
       : cpl
-      ? `CPL €${cpl.toFixed(1)}`
-      : `CPQL €${cpql?.toFixed(1)}`;
+      ? `CPL $${cpl.toFixed(1)}`
+      : `CPQL $${cpql?.toFixed(1)}`;
 
     await supabase.from("creative_alerts").insert({
       ad_id:      row.ad_id,
       ad_name:    row.ad_name,
       flow:       row.flow,
       alert_type: "cpl_spike",
-      message:    `${metricStr} — превышает цель (CPL €20 / CPQL €28) при ${(row.impressions as number).toLocaleString()} показах`,
+      message:    `${metricStr} — превышает цель (CPL $20 / CPQL $28) при ${(row.impressions as number).toLocaleString()} показах`,
       value:      cpl ?? cpql ?? 0,
       threshold:  20,
     });
@@ -119,17 +119,17 @@ export async function runAlertCheck(): Promise<{ created: number; dismissed: num
       `📛 ${row.ad_name as string}\n` +
       `📊 ${metricStr}\n` +
       `👁 ${(row.impressions as number).toLocaleString()} показов\n` +
-      `🎯 Цель: CPL ≤ €20 / CPQL ≤ €28\n\n` +
+      `🎯 Цель: CPL ≤ $20 / CPQL ≤ $28\n\n` +
       `Рекомендуется остановить.`
     );
     created++;
   }
 
-  // ── Fake winner detected: прошли KPI, но имеют red flags + spend ≥ €50 ────
+  // ── Fake winner detected: прошли KPI, но имеют red flags + spend ≥ $50 ────
   const RISK_LABEL: Record<string, string> = {
     low_qual_cr:   "слабая Lead→Qual воронка (<60%)",
     short_lifespan: "короткий жизненный цикл (<7 дней)",
-    low_roas_30d:  "ROAS<1 при возрасте ≥30 дней и spend≥€500",
+    low_roas_30d:  "ROAS<1 при возрасте ≥30 дней и spend≥$500",
   };
   for (const row of fakeWinnerRows) {
     const { data: existing } = await supabase
@@ -154,7 +154,7 @@ export async function runAlertCheck(): Promise<{ created: number; dismissed: num
       ad_name:    row.ad_name,
       flow:       row.flow,
       alert_type: "fake_winner_detected",
-      message:    `Прошёл KPI (CPL €${cpl?.toFixed(1) ?? "—"}, CPQL €${cpql?.toFixed(1) ?? "—"}), но: ${signalsHuman}. Spend €${spend.toFixed(0)}.`,
+      message:    `Прошёл KPI (CPL $${cpl?.toFixed(1) ?? "—"}, CPQL $${cpql?.toFixed(1) ?? "—"}), но: ${signalsHuman}. Spend $${spend.toFixed(0)}.`,
       value:      spend,
       threshold:  FAKE_WINNER_SPEND_FLOOR,
     });
@@ -162,8 +162,8 @@ export async function runAlertCheck(): Promise<{ created: number; dismissed: num
     await sendTelegram(
       `🟠 <b>Fake winner — KPI прошёл, но деньги в минус</b>\n\n` +
       `📛 ${row.ad_name as string}\n` +
-      `📊 CPL €${cpl?.toFixed(1) ?? "—"} · CPQL €${cpql?.toFixed(1) ?? "—"} · CR ${cr?.toFixed(0) ?? "—"}% · ROAS ${roas?.toFixed(2) ?? "—"}\n` +
-      `💸 Spend: €${spend.toFixed(0)}\n` +
+      `📊 CPL $${cpl?.toFixed(1) ?? "—"} · CPQL $${cpql?.toFixed(1) ?? "—"} · CR ${cr?.toFixed(0) ?? "—"}% · ROAS ${roas?.toFixed(2) ?? "—"}\n` +
+      `💸 Spend: $${spend.toFixed(0)}\n` +
       `⚑ Red flags: ${signalsHuman}\n\n` +
       `Внешне выглядит как успех, по KPI зелёный — но воронка/экономика сломаны. Рассмотри стоп.`
     );

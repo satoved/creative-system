@@ -308,15 +308,15 @@ async function askClaudeForSlots(inp: AskInput): Promise<ClaudeResponse> {
     rows.length === 0 ? "  (нет)" : rows.map(r => `  ${r.code}: ${r.name}${r.description ? ` — ${r.description.slice(0, 100)}` : ""}`).join("\n");
 
   const winnersBlock = inp.winners.slice(0, 15).map(w =>
-    `  ${w.row.ad_name} · CPL €${Number(w.row.cpl).toFixed(1)} · spend €${Number(w.row.spend).toFixed(0)} · коды: P=${w.parts.personaCode ?? "?"} H=${w.parts.hookCode ?? "?"} B=${w.parts.bodyCode ?? "?"} A=${w.parts.angleCode ?? "?"}`
+    `  ${w.row.ad_name} · CPL $${Number(w.row.cpl).toFixed(1)} · spend $${Number(w.row.spend).toFixed(0)} · коды: P=${w.parts.personaCode ?? "?"} H=${w.parts.hookCode ?? "?"} B=${w.parts.bodyCode ?? "?"} A=${w.parts.angleCode ?? "?"}`
   ).join("\n");
 
   const fakeBlock = inp.fakeWinners.slice(0, 15).map(w =>
-    `  ${w.row.ad_name} · CPL €${Number(w.row.cpl).toFixed(1)} · spend €${Number(w.row.spend).toFixed(0)} · коды: P=${w.parts.personaCode ?? "?"} H=${w.parts.hookCode ?? "?"} B=${w.parts.bodyCode ?? "?"} A=${w.parts.angleCode ?? "?"}`
+    `  ${w.row.ad_name} · CPL $${Number(w.row.cpl).toFixed(1)} · spend $${Number(w.row.spend).toFixed(0)} · коды: P=${w.parts.personaCode ?? "?"} H=${w.parts.hookCode ?? "?"} B=${w.parts.bodyCode ?? "?"} A=${w.parts.angleCode ?? "?"}`
   ).join("\n");
 
   const losersBlock = inp.losers.slice(0, 10).map(w =>
-    `  ${w.row.ad_name} · CPL €${Number(w.row.cpl ?? 0).toFixed(1)} · коды: P=${w.parts.personaCode ?? "?"} H=${w.parts.hookCode ?? "?"} B=${w.parts.bodyCode ?? "?"} A=${w.parts.angleCode ?? "?"}`
+    `  ${w.row.ad_name} · CPL $${Number(w.row.cpl ?? 0).toFixed(1)} · коды: P=${w.parts.personaCode ?? "?"} H=${w.parts.hookCode ?? "?"} B=${w.parts.bodyCode ?? "?"} A=${w.parts.angleCode ?? "?"}`
   ).join("\n");
 
   const bivariateBlock = inp.bivariate
@@ -334,7 +334,7 @@ async function askClaudeForSlots(inp: AskInput): Promise<ClaudeResponse> {
 
 ${briefDesc}
 
-Цели: CPL ≤ €${inp.settings.cplTarget}, CPQL ≤ €${inp.settings.cpqlTarget}.
+Цели: CPL ≤ $${inp.settings.cplTarget}, CPQL ≤ $${inp.settings.cpqlTarget}.
 Поток: ${inp.flow.toUpperCase()} · Формат: ${inp.format.toUpperCase()}
 
 ЗАДАЧА: сформировать ровно ${inp.packSize} креативов в следующем распределении:

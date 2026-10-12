@@ -21,7 +21,7 @@ const HEALTH = {
 } as const;
 
 const cplColor = (v: number | null) => v == null ? "#666" : v <= 20 ? "#6EC8A0" : v <= 26 ? "#FF8B5A" : "#D96B6B";
-const eur = (v: number | null | undefined) => v == null ? "—" : `€${v.toFixed(1)}`;
+const eur = (v: number | null | undefined) => v == null ? "—" : `$${v.toFixed(1)}`;
 
 // Светофор-шкала hook rate (3-сек просмотры / показы).
 function hookBand(r: number | null | undefined): { color: string; label: string } {
@@ -276,7 +276,7 @@ export default function ReportPage() {
               <Stat label="в тесте" value={kpi.testing} color="#888" />
               <Stat label="blended CPL" value={eur(kpi.blendedCpl)} color={cplColor(kpi.blendedCpl)} />
               <Stat label="blended CPQL" value={eur(kpi.blendedCpql)} color={cplColor(kpi.blendedCpql)} />
-              <Stat label="спенд" value={`€${kpi.totalSpend.toFixed(0)}`} color="#E2E0DB" />
+              <Stat label="спенд" value={`$${kpi.totalSpend.toFixed(0)}`} color="#E2E0DB" />
             </div>
           </Card>
 

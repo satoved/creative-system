@@ -54,9 +54,9 @@ export async function POST(req: NextRequest) {
   }
 
   const metrics = [
-    `Spend €${fmt(row.spend)}`, `Impressions ${row.impressions}`, `CPM €${fmt(row.cpm)}`,
-    `CTR ${fmt(row.ctr)}%`, `CPC €${fmt(row.cpc)}`, `CR click→lead ${fmt(row.crClickLead)}%`,
-    `Leads ${row.leads}`, `CPL €${fmt(row.cpl)}`, `Qual leads ${row.qualLeads}`, `CPQL €${fmt(row.cpql)}`,
+    `Spend $${fmt(row.spend)}`, `Impressions ${row.impressions}`, `CPM $${fmt(row.cpm)}`,
+    `CTR ${fmt(row.ctr)}%`, `CPC $${fmt(row.cpc)}`, `CR click→lead ${fmt(row.crClickLead)}%`,
+    `Leads ${row.leads}`, `CPL $${fmt(row.cpl)}`, `Qual leads ${row.qualLeads}`, `CPQL $${fmt(row.cpql)}`,
     `Hook rate ${fmt(row.hookRate, 1)}%`, `Hold rate ${fmt(row.holdRate, 1)}%`, `Статус: ${row.status}`,
   ].join(" · ");
 

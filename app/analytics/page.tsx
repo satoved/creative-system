@@ -74,12 +74,12 @@ function ParamTable({ stats, type }: { stats: ParamStat[]; type: string }) {
                 </div>
                 <Bar value={s.spend} max={maxSpend} color={color} />
               </td>
-              <td style={{ padding: "10px 12px", textAlign: "right", color: "#AAA", fontWeight: 600 }}>€{s.spend.toFixed(0)}</td>
+              <td style={{ padding: "10px 12px", textAlign: "right", color: "#AAA", fontWeight: 600 }}>${s.spend.toFixed(0)}</td>
               <td style={{ padding: "10px 12px", textAlign: "right", color: "#666" }}>{s.impressions >= 1000 ? `${(s.impressions / 1000).toFixed(1)}K` : s.impressions}</td>
               <td style={{ padding: "10px 12px", textAlign: "right", color: s.leads > 0 ? "#AAA" : "#333" }}>{s.leads || "—"}</td>
               <td style={{ padding: "10px 12px", textAlign: "right", color: s.qualLeads > 0 ? "#AAA" : "#333" }}>{s.qualLeads || "—"}</td>
-              <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(s.cpl) }}>{s.cpl != null ? `€${s.cpl.toFixed(1)}` : "—"}</td>
-              <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(s.cpql) }}>{s.cpql != null ? `€${s.cpql.toFixed(1)}` : "—"}</td>
+              <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(s.cpl) }}>{s.cpl != null ? `$${s.cpl.toFixed(1)}` : "—"}</td>
+              <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(s.cpql) }}>{s.cpql != null ? `$${s.cpql.toFixed(1)}` : "—"}</td>
               <td style={{ padding: "10px 12px", textAlign: "right" }}>
                 {s.winRate != null ? <span style={{ fontWeight: 700, color: winColor(s.winRate) }}>{Math.round(s.winRate * 100)}%</span> : <span style={{ color: "#333" }}>—</span>}
                 {(s.winnerCount > 0 || s.fakeWinnerCount > 0 || s.loserCount > 0) && (
@@ -155,11 +155,11 @@ function ComboView({ combos }: { combos: Record<string, ComboStat[]> }) {
                       </div>
                       <Bar value={c.spend} max={maxSpend} color={c.winners > 0 ? "#6EC8A0" : c.fakeWinners > 0 ? "#FF8B5A" : "#444"} />
                     </td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", color: "#AAA", fontWeight: 600 }}>€{c.spend.toFixed(0)}</td>
+                    <td style={{ padding: "10px 12px", textAlign: "right", color: "#AAA", fontWeight: 600 }}>${c.spend.toFixed(0)}</td>
                     <td style={{ padding: "10px 12px", textAlign: "right", color: c.leads > 0 ? "#AAA" : "#333" }}>{c.leads || "—"}</td>
                     <td style={{ padding: "10px 12px", textAlign: "right", color: c.qualLeads > 0 ? "#AAA" : "#333" }}>{c.qualLeads || "—"}</td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(c.cpl) }}>{c.cpl != null ? `€${c.cpl.toFixed(1)}` : "—"}</td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(c.cpql) }}>{c.cpql != null ? `€${c.cpql.toFixed(1)}` : "—"}</td>
+                    <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(c.cpl) }}>{c.cpl != null ? `$${c.cpl.toFixed(1)}` : "—"}</td>
+                    <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(c.cpql) }}>{c.cpql != null ? `$${c.cpql.toFixed(1)}` : "—"}</td>
                     <td style={{ padding: "10px 12px", textAlign: "right" }}>
                       {c.winRate != null ? <span style={{ fontWeight: 700, color: winColor(c.winRate) }}>{Math.round(c.winRate * 100)}%</span> : <span style={{ color: "#333" }}>—</span>}
                       {(c.winners > 0 || c.fakeWinners > 0 || c.losers > 0) && (
@@ -215,8 +215,8 @@ function LineageView({ sessions }: { sessions: SessionLineage[] }) {
                 <div style={{ display: "flex", gap: 14, fontSize: 11, color: "#555", flexWrap: "wrap" }}>
                   <span>{new Date(s.createdAt).toLocaleDateString("ru")}</span>
                   <span>Брифов: {s.totalBriefs} → Одобрено: {s.approvedBriefs} → Опубликовано: {s.publishedAds}</span>
-                  {s.totalSpend > 0 && <span>Spend: €{s.totalSpend.toFixed(0)}</span>}
-                  {s.avgCpl != null && <span style={{ color: cplColor(s.avgCpl) }}>Avg CPL: €{s.avgCpl.toFixed(1)}</span>}
+                  {s.totalSpend > 0 && <span>Spend: ${s.totalSpend.toFixed(0)}</span>}
+                  {s.avgCpl != null && <span style={{ color: cplColor(s.avgCpl) }}>Avg CPL: ${s.avgCpl.toFixed(1)}</span>}
                 </div>
               </div>
               <span style={{ fontSize: 12, color: "#444" }}>{isOpen ? "▲" : "▼"}</span>
@@ -241,9 +241,9 @@ function LineageView({ sessions }: { sessions: SessionLineage[] }) {
                           {p ? (
                             <>
                               <Badge color={STATUS_COLOR_AD[p.autoStatus]}>{STATUS_LABEL_AD[p.autoStatus]}</Badge>
-                              {p.cpl != null && <span style={{ fontSize: 11, fontWeight: 700, color: cplColor(p.cpl) }}>CPL €{p.cpl.toFixed(1)}</span>}
-                              {p.cpql != null && <span style={{ fontSize: 11, color: cplColor(p.cpql) }}>CPQL €{p.cpql.toFixed(1)}</span>}
-                              <span style={{ fontSize: 11, color: "#444" }}>€{p.spend.toFixed(0)}</span>
+                              {p.cpl != null && <span style={{ fontSize: 11, fontWeight: 700, color: cplColor(p.cpl) }}>CPL ${p.cpl.toFixed(1)}</span>}
+                              {p.cpql != null && <span style={{ fontSize: 11, color: cplColor(p.cpql) }}>CPQL ${p.cpql.toFixed(1)}</span>}
+                              <span style={{ fontSize: 11, color: "#444" }}>${p.spend.toFixed(0)}</span>
                               <span style={{ fontSize: 11, color: "#333" }}>{p.impressions >= 1000 ? `${(p.impressions / 1000).toFixed(1)}K` : p.impressions} показов</span>
                             </>
                           ) : (
@@ -354,11 +354,11 @@ function BivariateTable({ results, filterType }: { results: BivariateResult[]; f
                 </td>
                 <td style={{ padding: "9px 12px", textAlign: "right", color: "#555", fontSize: 11 }}>{r.withCount} / {r.withLeads}л</td>
                 <td style={{ padding: "9px 12px", textAlign: "right", fontWeight: 700, color: r.withCpl != null ? cplColor(r.withCpl) : "#333" }}>
-                  {r.withCpl != null ? `€${r.withCpl.toFixed(1)}` : "—"}
+                  {r.withCpl != null ? `$${r.withCpl.toFixed(1)}` : "—"}
                 </td>
                 <td style={{ padding: "9px 12px", textAlign: "right", color: "#555", fontSize: 11 }}>{r.withoutCount} / {r.withoutLeads}л</td>
                 <td style={{ padding: "9px 12px", textAlign: "right", color: "#666" }}>
-                  {r.withoutCpl != null ? `€${r.withoutCpl.toFixed(1)}` : "—"}
+                  {r.withoutCpl != null ? `$${r.withoutCpl.toFixed(1)}` : "—"}
                 </td>
                 <td style={{ padding: "9px 12px", textAlign: "right" }}>
                   <RatioBar ratio={r.ratio} />
@@ -418,9 +418,9 @@ function GenealogyView({ families }: { families: GenealogyFamily[] }) {
                   <span style={{ fontSize: 11, color: "#555", marginLeft: 4 }}>{f.members.length} вариант{f.members.length > 1 ? "а" : ""}</span>
                 </div>
                 <div style={{ display: "flex", gap: 14, fontSize: 11, color: "#555" }}>
-                  {f.bestCpl != null && <span style={{ color: "#6EC8A0" }}>Лучший CPL: €{f.bestCpl.toFixed(1)}</span>}
-                  {f.worstCpl != null && <span style={{ color: "#D96B6B" }}>Худший CPL: €{f.worstCpl.toFixed(1)}</span>}
-                  {spread != null && <span style={{ color: spread > 5 ? "#E8AA42" : "#444" }}>Разброс: €{spread.toFixed(1)}</span>}
+                  {f.bestCpl != null && <span style={{ color: "#6EC8A0" }}>Лучший CPL: ${f.bestCpl.toFixed(1)}</span>}
+                  {f.worstCpl != null && <span style={{ color: "#D96B6B" }}>Худший CPL: ${f.worstCpl.toFixed(1)}</span>}
+                  {spread != null && <span style={{ color: spread > 5 ? "#E8AA42" : "#444" }}>Разброс: ${spread.toFixed(1)}</span>}
                 </div>
               </div>
               <span style={{ fontSize: 12, color: "#444" }}>{isOpen ? "▲" : "▼"}</span>
@@ -433,9 +433,9 @@ function GenealogyView({ families }: { families: GenealogyFamily[] }) {
                     <div key={m.adName} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 10px", background: "rgba(255,255,255,0.02)", borderRadius: 6, flexWrap: "wrap" }}>
                       <span style={{ fontFamily: "monospace", fontSize: 11, fontWeight: 700, color: varyColor, background: `${varyColor}18`, padding: "2px 7px", borderRadius: 5 }}>{m.code}</span>
                       <span style={{ fontFamily: "monospace", fontSize: 10, color: "#555", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.adName}</span>
-                      {m.cpl != null && <span style={{ fontSize: 11, fontWeight: 700, color: cplColor(m.cpl) }}>€{m.cpl.toFixed(1)}</span>}
+                      {m.cpl != null && <span style={{ fontSize: 11, fontWeight: 700, color: cplColor(m.cpl) }}>${m.cpl.toFixed(1)}</span>}
                       {m.cpl == null && m.leads === 0 && <span style={{ fontSize: 10, color: "#333" }}>нет лидов</span>}
-                      <span style={{ fontSize: 10, color: "#444" }}>€{m.spend.toFixed(0)} спенд</span>
+                      <span style={{ fontSize: 10, color: "#444" }}>${m.spend.toFixed(0)} спенд</span>
                       {m.autoStatus !== "unknown" && (
                         <span style={{ fontSize: 10, color: STATUS_COLOR_AD[m.autoStatus] ?? "#555" }}>
                           {STATUS_LABEL_AD[m.autoStatus] ?? m.autoStatus}
@@ -722,7 +722,7 @@ function StatusView({ status }: { status: StatusKind }) {
           <div style={{ fontSize: 11, color: "#555", marginTop: 4 }}>{meta.titlePlural}</div>
         </Card>
         <Card style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 800, color: "#FFF" }}>€{totalSpend.toFixed(0)}</div>
+          <div style={{ fontSize: 28, fontWeight: 800, color: "#FFF" }}>${totalSpend.toFixed(0)}</div>
           <div style={{ fontSize: 11, color: "#555", marginTop: 4 }}>{meta.titleSpend}</div>
         </Card>
         <Card style={{ textAlign: "center" }}>
@@ -734,7 +734,7 @@ function StatusView({ status }: { status: StatusKind }) {
           <div style={{ fontSize: 11, color: "#555", marginTop: 4 }}>Квал.лиды</div>
         </Card>
         <Card style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 800, color: "#AAA" }}>{totalLeads > 0 ? `€${(totalSpend / totalLeads).toFixed(1)}` : "—"}</div>
+          <div style={{ fontSize: 28, fontWeight: 800, color: "#AAA" }}>{totalLeads > 0 ? `$${(totalSpend / totalLeads).toFixed(1)}` : "—"}</div>
           <div style={{ fontSize: 11, color: "#555", marginTop: 4 }}>blended CPL</div>
         </Card>
       </div>
@@ -762,7 +762,7 @@ function StatusView({ status }: { status: StatusKind }) {
             {topParams.map(p => (
               <div key={p.code} style={{ padding: "6px 10px", borderRadius: 6, background: `${TYPE_COLOR[p.type]}14`, border: `1px solid ${TYPE_COLOR[p.type]}30`, display: "flex", flexDirection: "column", gap: 2 }}>
                 <span style={{ fontFamily: "monospace", fontWeight: 700, color: TYPE_COLOR[p.type], fontSize: 12 }}>{p.code}</span>
-                <span style={{ fontSize: 10, color: "#888" }}>€{p.spend.toFixed(0)} · {p.count}×</span>
+                <span style={{ fontSize: 10, color: "#888" }}>${p.spend.toFixed(0)} · {p.count}×</span>
               </div>
             ))}
           </div>
@@ -802,9 +802,9 @@ function StatusView({ status }: { status: StatusKind }) {
                         </div>
                         <Bar value={r.spend} max={maxSpend} color={meta.barColor} />
                       </td>
-                      <td style={{ padding: "10px 12px", textAlign: "right", color: "#AAA", fontWeight: 600 }}>€{r.spend.toFixed(0)}</td>
-                      <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(r.cpl) }}>{r.cpl != null ? `€${r.cpl.toFixed(1)}` : "—"}</td>
-                      <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(r.cpql) }}>{r.cpql != null ? `€${r.cpql.toFixed(1)}` : "—"}</td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", color: "#AAA", fontWeight: 600 }}>${r.spend.toFixed(0)}</td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(r.cpl) }}>{r.cpl != null ? `$${r.cpl.toFixed(1)}` : "—"}</td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: cplColor(r.cpql) }}>{r.cpql != null ? `$${r.cpql.toFixed(1)}` : "—"}</td>
                       <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: r.crLeadToQual != null ? (r.crLeadToQual >= 60 ? "#6EC8A0" : "#D96B6B") : "#444" }}>{r.crLeadToQual != null ? `${r.crLeadToQual.toFixed(0)}%` : "—"}</td>
                       <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 700, color: r.roas != null ? (r.roas >= 1 ? "#6EC8A0" : "#D96B6B") : "#444" }}>{r.roas != null ? r.roas.toFixed(2) : "—"}</td>
                       <td style={{ padding: "10px 12px", textAlign: "right", color: "#888", fontSize: 11 }}>{r.ageDays}д / {r.lifespanDays}д</td>
@@ -876,9 +876,9 @@ export default function AnalyticsPage() {
       />
 
       <div style={{ fontSize: 11, color: "#444", marginBottom: 16, display: "flex", gap: 16, flexWrap: "wrap" }}>
-        <span style={{ color: "#6EC8A0" }}>Виннер: CPL ≤ €{TARGET_CPL} + CPQL ≤ €{TARGET_CPQL} + ≥8K показов</span>
+        <span style={{ color: "#6EC8A0" }}>Виннер: CPL ≤ ${TARGET_CPL} + CPQL ≤ ${TARGET_CPQL} + ≥8K показов</span>
         <span style={{ color: "#FF8B5A" }}>Fake winner: прошёл KPI, но имеет red flags</span>
-        <span style={{ color: "#D96B6B" }}>Лузер: CPL {">"} €{TARGET_CPL * 1.3}</span>
+        <span style={{ color: "#D96B6B" }}>Лузер: CPL {">"} ${TARGET_CPL * 1.3}</span>
       </div>
 
       {/* Main tab switcher */}

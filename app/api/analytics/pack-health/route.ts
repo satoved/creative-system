@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase";
 
-const CPL_RED_THRESHOLD   = 25;   // CPL > €25 за 2 дня подряд → красный
+const CPL_RED_THRESHOLD   = 25;   // CPL > $25 за 2 дня подряд → красный
 const CTR_DROP_THRESHOLD  = 0.70; // CTR падает ниже 70% от 7-дневного среднего → жёлтый
 const MIN_SPEND_ACTIVE    = 1;    // минимальный спенд за день чтобы считать активным
 const LOOKBACK_DAYS       = 7;
@@ -100,7 +100,7 @@ export async function GET(): Promise<NextResponse<PackHealthResult | { error: st
     const ctrDays = (ctrByAd[adName] ?? []).sort((a, b) => b.date.localeCompare(a.date));
     const flow = adFlowMap[adName] ?? null;
 
-    // ── Сигнал RED: CPL > €25 за последние 2 дня подряд ──────────────────────
+    // ── Сигнал RED: CPL > $25 за последние 2 дня подряд ──────────────────────
     const daysWithLeads = pbiDays.filter(d => d.leads > 0 && d.spend > 0);
     if (daysWithLeads.length >= 2) {
       const [d1, d2] = daysWithLeads;
@@ -111,7 +111,7 @@ export async function GET(): Promise<NextResponse<PackHealthResult | { error: st
           adName,
           flow,
           signalType: "cpl_red",
-          message: `CPL €${cpl1.toFixed(1)} (сегодня) и €${cpl2.toFixed(1)} (вчера) — выше €${CPL_RED_THRESHOLD} два дня подряд`,
+          message: `CPL $${cpl1.toFixed(1)} (сегодня) и $${cpl2.toFixed(1)} (вчера) — выше $${CPL_RED_THRESHOLD} два дня подряд`,
           daysAgo: 0,
           currentCpl: cpl1,
           avgCtr7d: null,

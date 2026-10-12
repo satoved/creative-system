@@ -69,7 +69,7 @@ function statusTotals(perf: PerfRow[]) {
 function totalsBlock(perf: PerfRow[]): string {
   const t = statusTotals(perf);
   const r = (x: { n: number; spend: number; leads: number; qual: number }) =>
-    `${x.n} шт · спенд €${x.spend.toFixed(0)} · лиды ${x.leads} · qual ${x.qual}`;
+    `${x.n} шт · спенд $${x.spend.toFixed(0)} · лиды ${x.leads} · qual ${x.qual}`;
   return `## ТОЧНЫЕ ИТОГИ (посчитаны кодом — ЦИТИРУЙ КАК ЕСТЬ; НЕ складывай и НЕ усредняй числа сам)
 Виннеры: ${r(t.winner)}
 Fake-winners: ${r(t.fake)}
@@ -261,17 +261,17 @@ async function buildNarrative(args: {
     low_qual_cr: "низкая CR Lead→Qual", short_lifespan: "короткий жизненный цикл", low_roas_30d: "ROAS<1",
   };
   const fmtRisk = (s: unknown) => (Array.isArray(s) ? (s as string[]) : []).map(x => RISK_LABEL[x] ?? x).join(", ") || "—";
-  const eur = (v: number | null) => (v == null ? "—" : `€${v.toFixed(1)}`);
+  const eur = (v: number | null) => (v == null ? "—" : `$${v.toFixed(1)}`);
   const sig = (s: ReportSignal) => `${s.code} (${s.paramType}, ratio ${s.ratio?.toFixed(2) ?? "—"})`;
 
   const prompt = `Ты — аналитик Meta Ads для ${business.name}. Готовишь ЕДИНЫЙ отчёт по всему массиву креативов перед запуском нового пакета.
 
 ${getAiContext()}
 
-Цели: CPL ≤ €${settings.cplTarget}, CPQL ≤ €${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus.toLocaleString()} показов.${flow !== "all" ? `\nПоток: ${flow.toUpperCase()}` : "\nПоток: весь массив (COM+GOV)"}
+Цели: CPL ≤ $${settings.cplTarget}, CPQL ≤ $${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus.toLocaleString()} показов.${flow !== "all" ? `\nПоток: ${flow.toUpperCase()}` : "\nПоток: весь массив (COM+GOV)"}
 
 ## СВОДКА МАССИВА
-Здоровье пакета: ${kpi.packHealth}. Объявлений: ${kpi.activeAds}. Спенд: €${kpi.totalSpend.toFixed(0)}. Blended CPL: ${eur(kpi.blendedCpl)}, CPQL: ${eur(kpi.blendedCpql)}.
+Здоровье пакета: ${kpi.packHealth}. Объявлений: ${kpi.activeAds}. Спенд: $${kpi.totalSpend.toFixed(0)}. Blended CPL: ${eur(kpi.blendedCpl)}, CPQL: ${eur(kpi.blendedCpql)}.
 Виннеры: ${kpi.winners} · ⚠️ fake-winners: ${kpi.fakeWinners} · лузеры: ${kpi.losers} · в тесте: ${kpi.testing}.
 
 ${totalsBlock(perf)}
@@ -280,10 +280,10 @@ ${totalsBlock(perf)}
 ${winners.slice(0, 15).map(r => `• ${r.ad_name} | CPL ${eur(r.cpl)} | CPQL ${eur(r.cpql)} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"}${descOf(r)}`).join("\n") || "Виннеров нет."}
 
 ## ⚠️ FAKE-WINNERS — замаскированные убытки (${fakeWinners.length})
-${fakeWinners.slice(0, 12).map(r => `• ${r.ad_name} | spend €${num(r.spend).toFixed(0)} | CPL ${eur(r.cpl)} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | ⚑ ${fmtRisk(r.risk_signals)}${descOf(r)}`).join("\n") || "Опасных виннеров нет."}
+${fakeWinners.slice(0, 12).map(r => `• ${r.ad_name} | spend $${num(r.spend).toFixed(0)} | CPL ${eur(r.cpl)} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | ⚑ ${fmtRisk(r.risk_signals)}${descOf(r)}`).join("\n") || "Опасных виннеров нет."}
 
 ## ЛУЗЕРЫ (${losers.length})
-${losers.slice(0, 10).map(r => `• ${r.ad_name} | CPL ${eur(r.cpl)} | €${num(r.spend).toFixed(0)} спенд${descOf(r)}`).join("\n") || "Лузеров нет."}
+${losers.slice(0, 10).map(r => `• ${r.ad_name} | CPL ${eur(r.cpl)} | $${num(r.spend).toFixed(0)} спенд${descOf(r)}`).join("\n") || "Лузеров нет."}
 
 ## БИВАРИАТ — что помогает / вредит (по всему массиву)
 HELPS (снижают CPL): ${visual.helps.map(sig).join("; ") || "—"}
@@ -366,21 +366,21 @@ function buildAuditContext(args: {
   const { settings, kpi, visual, perf, narrative } = args;
   const ROAS_MATURITY = 30;   // age, после которого требуется ROAS (верх цикла сделки)
   const ROAS_WIN_MIN = 1.0;   // минимальный ROAS для зрелого винера
-  const eur = (v: number | null) => (v == null ? "—" : `€${v.toFixed(1)}`);
+  const eur = (v: number | null) => (v == null ? "—" : `$${v.toFixed(1)}`);
   const sig = (r: PerfRow) => (Array.isArray(r.risk_signals) && r.risk_signals.length ? (r.risk_signals as string[]).join(",") : "—");
   const line = (r: PerfRow) =>
-    `${r.ad_name} | spend €${num(r.spend).toFixed(0)} | CPL ${eur(r.cpl)} | CPQL ${eur(r.cpql)} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | age ${r.age_days ?? "—"}д | signals ${sig(r)} | leads ${r.leads}/${r.qual_leads}`;
+    `${r.ad_name} | spend $${num(r.spend).toFixed(0)} | CPL ${eur(r.cpl)} | CPQL ${eur(r.cpql)} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | age ${r.age_days ?? "—"}д | signals ${sig(r)} | leads ${r.leads}/${r.qual_leads}`;
   const winners = perf.filter(r => r.auto_status === "winner");
   const fakeWinners = perf.filter(r => r.auto_status === "fake_winner");
   const losers = perf.filter(r => r.auto_status === "loser");
-  return `Цели: CPL ≤ €${settings.cplTarget}, CPQL ≤ €${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus} показов.
+  return `Цели: CPL ≤ $${settings.cplTarget}, CPQL ≤ $${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus} показов.
 
 ПРАВИЛА КЛАССИФИКАЦИИ (статусы проставлены ПО НИМ — проверяй соответствие, не свою эвристику):
 - winner: показы ≥ порога И CPL ≤ цели И CPQL ≤ цели И (ад МОЛОДОЙ age<${ROAS_MATURITY}д ИЛИ ROAS ≥ ${ROAS_WIN_MIN}). Цикл сделки 14–30 дн: у молодых выручка не дозрела → ROAS=0 у молодого винера = НОРМА.
 - fake_winner: пороги CPL/CPQL пройдены, но есть риск — зрелый (age≥${ROAS_MATURITY}) с ROAS<${ROAS_WIN_MIN} ЛИБО есть signals (short_lifespan/low_roas_30d). Высокий ROAS у fake_winner ОК, если стоит signal.
 - loser: показы ≥ порога И (CPL > цели ИЛИ CPQL > цели). testing: мало показов / нет лидов.
 
-KPI: пакет ${kpi.packHealth}; объявлений ${kpi.activeAds}; спенд €${kpi.totalSpend.toFixed(0)}; blended CPL ${eur(kpi.blendedCpl)}; CPQL ${eur(kpi.blendedCpql)}; виннеры ${kpi.winners}; fake ${kpi.fakeWinners}; лузеры ${kpi.losers}; в тесте ${kpi.testing}.
+KPI: пакет ${kpi.packHealth}; объявлений ${kpi.activeAds}; спенд $${kpi.totalSpend.toFixed(0)}; blended CPL ${eur(kpi.blendedCpl)}; CPQL ${eur(kpi.blendedCpql)}; виннеры ${kpi.winners}; fake ${kpi.fakeWinners}; лузеры ${kpi.losers}; в тесте ${kpi.testing}.
 
 ${totalsBlock(perf)}
 (Это авторитетные итоги по ГРУППАМ. Списки ниже — усечённый top-N; НЕ пересчитывай суммы по ним и не сравнивай свою сумму среза с итогами выше.)

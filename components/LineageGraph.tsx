@@ -24,7 +24,7 @@ interface GraphNode { adName: string; codes: Codes; cpl: number | null; cpql: nu
 interface Proposal { fromWinner: number; changedParam: string; oldCode: string; newCode: string; codes: Codes; adName: string }
 interface GraphData { winners: GraphNode[]; losers: GraphNode[]; proposals: Proposal[]; hurts: string[]; hasData: boolean }
 
-const eur = (v: number | null) => v == null ? "—" : `€${v.toFixed(1)}`;
+const eur = (v: number | null) => v == null ? "—" : `$${v.toFixed(1)}`;
 const cplColor = (v: number | null) => v == null ? "#666" : v <= 20 ? "#6EC8A0" : v <= 26 ? "#FF8B5A" : "#D96B6B";
 
 type NodeData = {

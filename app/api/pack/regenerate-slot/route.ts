@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
 ${getBusiness().name}
 ${getAiContext()}
 
-Цели: CPL ≤ €${settings.cplTarget}, CPQL ≤ €${settings.cpqlTarget}.
+Цели: CPL ≤ $${settings.cplTarget}, CPQL ≤ $${settings.cpqlTarget}.
 Поток: ${meta.flow.toUpperCase()} · Формат: ${meta.format.toUpperCase()}
 
 ЗАДАЧА: перегенерируй ТОЛЬКО один слот пака с сохранением его категории.

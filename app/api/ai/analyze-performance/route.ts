@@ -53,13 +53,13 @@ export async function POST(req: NextRequest) {
   const dailySummary = Object.entries(dailyCpl)
     .sort(([a], [b]) => b.localeCompare(a))
     .slice(0, 5)
-    .map(([date, d]) => `${date}: CPL €${d.leads > 0 ? (d.spend / d.leads).toFixed(1) : "нет лидов"}, лидов: ${d.leads}`)
+    .map(([date, d]) => `${date}: CPL $${d.leads > 0 ? (d.spend / d.leads).toFixed(1) : "нет лидов"}, лидов: ${d.leads}`)
     .join("\n");
 
   const RISK_LABEL: Record<string, string> = {
     low_qual_cr:   "низкая CR Lead→Qual (<60%)",
     short_lifespan: "короткий жизненный цикл (<7 дней)",
-    low_roas_30d:  "ROAS<1 при возрасте ≥30 дней и spend≥€500",
+    low_roas_30d:  "ROAS<1 при возрасте ≥30 дней и spend≥$500",
   };
   const fmtRisk = (signals: unknown) => {
     const arr = Array.isArray(signals) ? signals as string[] : [];
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
 
 ${getAiContext()}
 
-Цели: CPL ≤ €${settings.cplTarget}, CPQL ≤ €${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus.toLocaleString()} показов.${flow && flow !== "all" ? `\nПоток: ${flow.toUpperCase()}` : ""}
+Цели: CPL ≤ $${settings.cplTarget}, CPQL ≤ $${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus.toLocaleString()} показов.${flow && flow !== "all" ? `\nПоток: ${flow.toUpperCase()}` : ""}
 
 ВАЖНО: помимо «настоящих» виннеров есть **fake_winners** — объявления, прошедшие KPI по CPL/CPQL/impressions,
 но имеющие проблемы внутри воронки или экономики. Это самая опасная категория: они выглядят как успех,
@@ -79,25 +79,25 @@ ${getAiContext()}
 
 ## НАСТОЯЩИЕ ВИННЕРЫ (${winners.length} шт.)
 ${winners.length > 0
-  ? winners.map(r => `• ${r.ad_name} | CPL €${r.cpl?.toFixed(1) ?? "—"} | CPQL €${r.cpql?.toFixed(1) ?? "—"} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | ${r.impressions?.toLocaleString()} показов`).join("\n")
+  ? winners.map(r => `• ${r.ad_name} | CPL $${r.cpl?.toFixed(1) ?? "—"} | CPQL $${r.cpql?.toFixed(1) ?? "—"} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | ${r.impressions?.toLocaleString()} показов`).join("\n")
   : "Виннеров нет."}
 
 ## ⚠️ FAKE WINNERS — опасные виннеры (${fakeWinners.length} шт.)
 Прошли KPI, но имеют red flags. Перечисли каждого, обязательно укажи СИГНАЛЫ и сумму потраченного бюджета.
 ${fakeWinners.length > 0
-  ? fakeWinners.slice(0, 15).map(r => `• ${r.ad_name} | spend €${r.spend?.toFixed(0)} | CPL €${r.cpl?.toFixed(1) ?? "—"} | CPQL €${r.cpql?.toFixed(1) ?? "—"} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | возраст ${r.age_days ?? "?"}д | lifespan ${r.lifespan_days ?? "?"}д | ⚑ ${fmtRisk(r.risk_signals)}`).join("\n")
+  ? fakeWinners.slice(0, 15).map(r => `• ${r.ad_name} | spend $${r.spend?.toFixed(0)} | CPL $${r.cpl?.toFixed(1) ?? "—"} | CPQL $${r.cpql?.toFixed(1) ?? "—"} | CR ${r.cr_lead_to_qual?.toFixed(0) ?? "—"}% | ROAS ${r.roas?.toFixed(2) ?? "—"} | возраст ${r.age_days ?? "?"}д | lifespan ${r.lifespan_days ?? "?"}д | ⚑ ${fmtRisk(r.risk_signals)}`).join("\n")
   : "Опасных виннеров нет — хорошо."}
 
 ## ЛУЗЕРЫ (${losers.length} шт.)
 ${losers.length > 0
-  ? losers.slice(0, 10).map(r => `• ${r.ad_name} | CPL €${r.cpl?.toFixed(1) ?? "—"} | €${r.spend?.toFixed(0)} спенд | ${r.impressions?.toLocaleString()} показов`).join("\n")
+  ? losers.slice(0, 10).map(r => `• ${r.ad_name} | CPL $${r.cpl?.toFixed(1) ?? "—"} | $${r.spend?.toFixed(0)} спенд | ${r.impressions?.toLocaleString()} показов`).join("\n")
   : "Лузеров нет."}
 
 ## В ТЕСТЕ с данными (топ по спенду, ${testing.length} шт.)
-${testing.slice(0, 10).map(r => `• ${r.ad_name} | CPL €${r.cpl?.toFixed(1) ?? "нет данных"} | €${r.spend?.toFixed(0)} спенд | ${r.leads ?? 0} лидов`).join("\n")}
+${testing.slice(0, 10).map(r => `• ${r.ad_name} | CPL $${r.cpl?.toFixed(1) ?? "нет данных"} | $${r.spend?.toFixed(0)} спенд | ${r.leads ?? 0} лидов`).join("\n")}
 
 ## ТОП-5 ПО CPL (среди всех со статусом)
-${top5cpl.map(r => `• ${r.ad_name}: CPL €${r.cpl?.toFixed(1)}, CPQL €${r.cpql?.toFixed(1) ?? "—"}, ${r.leads} лидов, €${r.spend?.toFixed(0)} спенд, статус: ${r.auto_status}`).join("\n") || "Нет данных."}
+${top5cpl.map(r => `• ${r.ad_name}: CPL $${r.cpl?.toFixed(1)}, CPQL $${r.cpql?.toFixed(1) ?? "—"}, ${r.leads} лидов, $${r.spend?.toFixed(0)} спенд, статус: ${r.auto_status}`).join("\n") || "Нет данных."}
 
 ## ДИНАМИКА CPL ПО ДНЯМ (все объявления агрегировано)
 ${dailySummary || "Нет данных."}

@@ -88,7 +88,7 @@ export async function POST() {
     }
   }
 
-  // Keep only ads active recently (had spend ≥ €1 on their last reported day)
+  // Keep only ads active recently (had spend ≥ $1 on their last reported day)
   const activeAds = Object.values(byName).filter(
     a => a.maxDate >= yesterday && a.lastDaySpend >= MIN_DAILY_SPEND
   );
@@ -123,7 +123,7 @@ export async function POST() {
     const pbi = pbiByName[ad.adName.toLowerCase()];
     const leads = pbi?.leads ?? 0;
 
-    // ── Trigger 2: dead-zero-leads — spend≥€50 без единого лида ────────────────
+    // ── Trigger 2: dead-zero-leads — spend≥$50 без единого лида ────────────────
     // Срабатывает РАНЬШЕ CPL-проверки и не требует MIN_IMPRESSIONS,
     // потому что главный сигнал тут — деньги без отдачи.
     if (leads === 0 && ad.spend >= DEAD_ZERO_SPEND_FLOOR) {
@@ -142,7 +142,7 @@ export async function POST() {
         ad_name:    ad.adName,
         flow:       ad.flow,
         alert_type: "dead_zero_leads",
-        message:    `Спенд €${ad.spend.toFixed(0)} за 7 дней без единого лида (PBI) при ${ad.impressions.toLocaleString()} показах — остановить`,
+        message:    `Спенд $${ad.spend.toFixed(0)} за 7 дней без единого лида (PBI) при ${ad.impressions.toLocaleString()} показах — остановить`,
         value:      ad.spend,
         threshold:  DEAD_ZERO_SPEND_FLOOR,
       });
@@ -150,9 +150,9 @@ export async function POST() {
       await sendTelegram(
         `🛑 <b>Объявление сжигает бюджет без лидов</b>\n\n` +
         `📛 ${ad.adName}\n` +
-        `💸 €${ad.spend.toFixed(0)} спенд (7д) при ${ad.impressions.toLocaleString()} показах, лидов <b>0</b>\n` +
+        `💸 $${ad.spend.toFixed(0)} спенд (7д) при ${ad.impressions.toLocaleString()} показах, лидов <b>0</b>\n` +
         `📅 Последний спенд: ${ad.maxDate}\n` +
-        `Порог тревоги: €${DEAD_ZERO_SPEND_FLOOR}\n\n` +
+        `Порог тревоги: $${DEAD_ZERO_SPEND_FLOOR}\n\n` +
         `Рекомендуется остановить вручную.`
       );
 
@@ -184,7 +184,7 @@ export async function POST() {
       ad_name:    ad.adName,
       flow:       ad.flow,
       alert_type: "early_stop",
-      message:    `CPL €${cpl.toFixed(1)} > €${EARLY_STOP_CPL} при ${ad.impressions.toLocaleString()} показах за 7 дней (спенд €${ad.spend.toFixed(0)}, лидов ${leads}) — рекомендуется остановить`,
+      message:    `CPL $${cpl.toFixed(1)} > $${EARLY_STOP_CPL} при ${ad.impressions.toLocaleString()} показах за 7 дней (спенд $${ad.spend.toFixed(0)}, лидов ${leads}) — рекомендуется остановить`,
       value:      cpl,
       threshold:  EARLY_STOP_CPL,
     });
@@ -192,8 +192,8 @@ export async function POST() {
     await sendTelegram(
       `⚠️ <b>Ранний кандидат на стоп</b>\n\n` +
       `📛 ${ad.adName}\n` +
-      `📊 CPL €${cpl.toFixed(1)} (порог €${EARLY_STOP_CPL}, план €20)\n` +
-      `👁 ${ad.impressions.toLocaleString()} показов · €${ad.spend.toFixed(0)} спенд (7д) · ${leads} лидов (PBI)\n` +
+      `📊 CPL $${cpl.toFixed(1)} (порог $${EARLY_STOP_CPL}, план $20)\n` +
+      `👁 ${ad.impressions.toLocaleString()} показов · $${ad.spend.toFixed(0)} спенд (7д) · ${leads} лидов (PBI)\n` +
       `📅 Последний спенд: ${ad.maxDate}\n\n` +
       `Рекомендуется остановить вручную.`
     );

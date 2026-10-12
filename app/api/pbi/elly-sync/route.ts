@@ -127,7 +127,7 @@ function parseDate(v: unknown): string {
 
 function parseNum(v: unknown): number {
   if (typeof v === "number") return v;
-  return parseFloat(String(v ?? "").replace(/[€\s\u00a0]/g, "").replace(",", ".")) || 0;
+  return parseFloat(String(v ?? "").replace(/[$\s\u00a0]/g, "").replace(",", ".")) || 0;
 }
 
 function parseViz(text: string): EllyRow[] | null {
@@ -136,9 +136,9 @@ function parseViz(text: string): EllyRow[] | null {
   try {
     const viz = JSON.parse(m[1]);
     if (viz.type !== "Table" || !Array.isArray(viz.data)) return null;
-    // Заголовки Plurio варьируются: "Revenue" vs "Revenue (€)", "Adv Spend (€)" и т.п.
+    // Заголовки Plurio варьируются: "Revenue" vs "Revenue ($)", "Adv Spend ($)" и т.п.
     // Ищем по НОРМАЛИЗОВАННОМУ ключу (lower + только буквы/цифры), иначе суффикс
-    // "(€)" ломал чтение (revenue молча падал в 0 — баг Google CRM-синка).
+    // "($)" ломал чтение (revenue молча падал в 0 — баг Google CRM-синка).
     const norm = (s: string) => s.toLowerCase().replace(/[^a-zа-я0-9]/gi, "");
     return viz.data.map((r: Record<string, unknown>) => {
       const map: Record<string, unknown> = {};

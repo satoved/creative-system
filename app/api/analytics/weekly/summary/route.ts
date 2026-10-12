@@ -12,7 +12,7 @@ export const maxDuration = 120;
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const k = (s: string) => (s ?? "").trim().toLowerCase();
-const eur = (n: number | null) => (n == null ? "—" : `€${n.toFixed(1)}`);
+const eur = (n: number | null) => (n == null ? "—" : `$${n.toFixed(1)}`);
 const blendedCpl = (spend: number, leads: number) => (leads > 0 ? spend / leads : null);
 
 export async function POST(req: NextRequest) {
@@ -69,19 +69,19 @@ export async function POST(req: NextRequest) {
   const byGroup = (keyFn: (r: WeeklyCreativeRow) => string) => {
     const g: Record<string, WeeklyCreativeRow[]> = {};
     for (const r of rows) (g[keyFn(r) || "—"] ??= []).push(r);
-    return Object.entries(g).map(([key, rs]) => { const a = agg(rs); return `${key}: ${rs.length} крео, спенд €${a.spend.toFixed(0)}, лидов ${a.leads}, CPL ${eur(a.cpl)}, CPQL ${eur(a.cpql)}`; }).join("\n");
+    return Object.entries(g).map(([key, rs]) => { const a = agg(rs); return `${key}: ${rs.length} крео, спенд $${a.spend.toFixed(0)}, лидов ${a.leads}, CPL ${eur(a.cpl)}, CPQL ${eur(a.cpql)}`; }).join("\n");
   };
 
   const line = (r: WeeklyCreativeRow) => {
     const p = paramByName[k(r.adName)];
-    const base = `${r.adName} [${r.status}] спенд €${r.spend.toFixed(0)}, лидов ${r.leads}, CPL ${eur(r.cpl)}, CPQL ${eur(r.cpql)}, hook ${r.hookRate == null ? "—" : r.hookRate.toFixed(0) + "%"}`;
+    const base = `${r.adName} [${r.status}] спенд $${r.spend.toFixed(0)}, лидов ${r.leads}, CPL ${eur(r.cpl)}, CPQL ${eur(r.cpql)}, hook ${r.hookRate == null ? "—" : r.hookRate.toFixed(0) + "%"}`;
     return p ? `${base}\n   хук: ${p.hook}\n   энгл: ${p.angle} · персона: ${p.persona} · боди: ${p.body}` : base;
   };
 
-  const wow = prev ? (() => { const a = agg((prev.rows ?? []) as WeeklyCreativeRow[]); return `Прошлая неделя (${prev.label}): спенд €${a.spend.toFixed(0)}, лидов ${a.leads}, blended CPL ${eur(a.cpl)}, CPQL ${eur(a.cpql)}.`; })() : "Прошлой недели для сравнения нет.";
+  const wow = prev ? (() => { const a = agg((prev.rows ?? []) as WeeklyCreativeRow[]); return `Прошлая неделя (${prev.label}): спенд $${a.spend.toFixed(0)}, лидов ${a.leads}, blended CPL ${eur(a.cpl)}, CPQL ${eur(a.cpql)}.`; })() : "Прошлой недели для сравнения нет.";
 
   const facts = `Неделя ${rep.label}. Крео: ${rows.length} (с разбором параметров: ${withParams}).
-ИТОГО: спенд €${cur.spend.toFixed(0)}, лидов ${cur.leads}, квал ${cur.qual}, blended CPL ${eur(cur.cpl)}, CPQL ${eur(cur.cpql)}.
+ИТОГО: спенд $${cur.spend.toFixed(0)}, лидов ${cur.leads}, квал ${cur.qual}, blended CPL ${eur(cur.cpl)}, CPQL ${eur(cur.cpql)}.
 Статусы: ${Object.entries(counts).map(([s, n]) => `${s} ${n}`).join(", ")}.
 ${wow}
 

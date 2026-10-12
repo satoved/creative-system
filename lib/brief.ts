@@ -68,7 +68,7 @@ export function getAiSystemPreamble(targets: { cpl: number; cpql: number; minImp
   const lines = [
     `Ты — аналитик Meta Ads для ${brief.business.name}.`,
     brief.ai_context,
-    `Цели: CPL ≤ €${targets.cpl}, CPQL ≤ €${targets.cpql}, порог значимости ${targets.minImpressions} показов.`,
+    `Цели: CPL ≤ $${targets.cpl}, CPQL ≤ $${targets.cpql}, порог значимости ${targets.minImpressions} показов.`,
     `Голос бренда: ${v.tone}.`,
   ];
   if (v.style_notes) lines.push(`Стиль: ${v.style_notes}`);

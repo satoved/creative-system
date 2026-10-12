@@ -33,7 +33,7 @@ function parseCsv(text: string): { headers: string[]; rows: Record<string, strin
 function parseNum(v: string): number {
   if (!v) return 0;
   // Remove currency symbols, spaces, commas used as thousands separator
-  return parseFloat(v.replace(/[€$\s]/g, "").replace(",", ".")) || 0;
+  return parseFloat(v.replace(/[$$\s]/g, "").replace(",", ".")) || 0;
 }
 
 // Try to auto-detect Elly columns
@@ -222,7 +222,7 @@ export default function PbiPage() {
                       <td style={{ padding: "5px 10px", color: "#ccc", maxWidth: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.ad_name}</td>
                       <td style={{ padding: "5px 10px", color: "#6EC8A0" }}>{r.leads}</td>
                       <td style={{ padding: "5px 10px", color: "#C490D1" }}>{r.qual_leads}</td>
-                      <td style={{ padding: "5px 10px", color: "#E8AA42" }}>{r.spend ? `€${r.spend.toFixed(0)}` : "—"}</td>
+                      <td style={{ padding: "5px 10px", color: "#E8AA42" }}>{r.spend ? `$${r.spend.toFixed(0)}` : "—"}</td>
                     </tr>
                   ))}
                 </tbody>

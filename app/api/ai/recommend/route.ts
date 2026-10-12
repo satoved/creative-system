@@ -93,10 +93,10 @@ function formatStats(stats: ParamStat[], type: string): string {
   if (!filtered.length) return "  нет данных";
   return filtered.map(s => {
     const parts = [`  ${s.code}:`];
-    if (s.cpl != null) parts.push(`CPL €${s.cpl}`);
-    if (s.cpql != null) parts.push(`CPQL €${s.cpql}`);
+    if (s.cpl != null) parts.push(`CPL $${s.cpl}`);
+    if (s.cpql != null) parts.push(`CPQL $${s.cpql}`);
     if (s.winRate != null) parts.push(`winRate ${s.winRate}% (${s.winnerCount}W/${s.fakeWinnerCount}FW/${s.loserCount}L из ${s.adCount})`);
-    else parts.push(`${s.adCount} объявл., €${s.spend} спенд, не решено`);
+    else parts.push(`${s.adCount} объявл., $${s.spend} спенд, не решено`);
     return parts.join(" | ");
   }).join("\n");
 }
@@ -122,7 +122,7 @@ ${getAiContext()}
 
 Цель: выбрать оптимальный набор параметров (до 3 по каждому типу) для следующего теста.
 Поток: ${flow?.toUpperCase() ?? "COM"}
-Цели: CPL ≤ €${settings.cplTarget}, CPQL ≤ €${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus} показов.
+Цели: CPL ≤ $${settings.cplTarget}, CPQL ≤ $${settings.cpqlTarget}, порог значимости ${settings.minImpressionsForStatus} показов.
 
 СТАТИСТИКА ПО ПАРАМЕТРАМ (из реальных данных Meta):
 
@@ -150,11 +150,11 @@ W = настоящие виннеры, FW = fake_winners (прошли KPI по 
 **FW считаются за неудачу** — их не повторяем.
 
 СТРАТЕГИЯ выбора:
-1. Если у параметра winRate > 30% и CPL ≤ €25 — включай в тест (проверено, работает).
+1. Если у параметра winRate > 30% и CPL ≤ $25 — включай в тест (проверено, работает).
 2. Если у параметра много FW (например, FW ≥ W и FW ≥ 3) — НЕ включай или включай c осторожностью:
    параметр маскируется под успех, но не приносит реального результата.
 3. Если у параметра мало данных (< 3 объявлений, impressions < 5000) — включай 1-2 таких (нужно дотестировать).
-4. Если у параметра winRate = 0% и CPL > €35 после 8000+ показов — НЕ включай (проигрышный паттерн).
+4. Если у параметра winRate = 0% и CPL > $35 после 8000+ показов — НЕ включай (проигрышный паттерн).
 5. Если параметра нет в статистике вообще — включи 1 такой (не тестировался, может быть виннером).
 6. Выбирай разнообразие: не все из одной категории "проверено хорошо" — оставляй место для открытий.
 

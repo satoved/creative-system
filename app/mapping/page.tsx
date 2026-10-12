@@ -111,7 +111,7 @@ function EditRow({
             {adRow.adName}
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
-            <span style={{ fontSize: 10, color: "#555" }}>€{adRow.spend.toFixed(0)} спенд</span>
+            <span style={{ fontSize: 10, color: "#555" }}>${adRow.spend.toFixed(0)} спенд</span>
             <span style={{ fontSize: 10, color: "#555" }}>{adRow.impressions.toLocaleString()} показов</span>
             {adRow.leads > 0 && <span style={{ fontSize: 10, color: "#6EC8A0" }}>{adRow.leads} лидов</span>}
             {adRow.flow && <Badge color={adRow.flow === "com" ? "#E8AA42" : "#48B8D0"}>{adRow.flow.toUpperCase()}</Badge>}

@@ -21,7 +21,7 @@ const MIN_IMP     = 8000;
 
 function fmt(n: number | null | undefined): string {
   if (n == null) return "—";
-  return `€${n.toFixed(1)}`;
+  return `$${n.toFixed(1)}`;
 }
 
 function pct(n: number | null | undefined): string {
@@ -35,7 +35,7 @@ function MetricPill({ value, target }: { value: number | null; target: number })
   const warn = value <= target * 1.3;
   return (
     <span style={{ fontSize: 12, fontWeight: 700, color: good ? "#6EC8A0" : warn ? "#E8AA42" : "#D96B6B" }}>
-      €{value.toFixed(1)}
+      ${value.toFixed(1)}
     </span>
   );
 }
@@ -98,7 +98,7 @@ function AdCard({ row }: { row: CreativePerformance }) {
             { label: "CPL",    val: <MetricPill value={row.cpl}  target={TARGET_CPL} /> },
             { label: "CPQL",   val: <MetricPill value={row.cpql} target={TARGET_CPQL} /> },
             { label: "Показы", val: <span style={{ fontSize: 12, fontWeight: 700, color: row.impressions >= MIN_IMP ? "#AAA" : "#555" }}>{row.impressions >= 1000 ? `${(row.impressions / 1000).toFixed(1)}K` : row.impressions}</span> },
-            { label: "Spend",  val: <span style={{ fontSize: 12, fontWeight: 700, color: "#AAA" }}>{fmt(row.spend).replace("€", "€")}</span> },
+            { label: "Spend",  val: <span style={{ fontSize: 12, fontWeight: 700, color: "#AAA" }}>{fmt(row.spend).replace("$", "$")}</span> },
           ].map(({ label, val }) => (
             <div key={label}>
               <div style={{ fontSize: 10, color: "#444", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{label}</div>
@@ -219,7 +219,7 @@ export default function FeedbackPage() {
           { label: "Виннеров",    value: String(counts.winners),  color: "#6EC8A0" },
           { label: "Лузеров",     value: String(counts.losers),   color: "#D96B6B" },
           { label: "Тестируется", value: String(counts.testing),  color: "#48B8D0" },
-          { label: "Средний CPL", value: avgCpl != null ? `€${avgCpl.toFixed(1)}` : "—", color: avgCpl != null && avgCpl <= TARGET_CPL ? "#6EC8A0" : "#E8AA42" },
+          { label: "Средний CPL", value: avgCpl != null ? `$${avgCpl.toFixed(1)}` : "—", color: avgCpl != null && avgCpl <= TARGET_CPL ? "#6EC8A0" : "#E8AA42" },
         ].map(s => (
           <Card key={s.label} style={{ textAlign: "center" }}>
             <div style={{ fontSize: 22, fontWeight: 800, color: s.color }}>{s.value}</div>
@@ -231,8 +231,8 @@ export default function FeedbackPage() {
       {/* Criteria hint */}
       <div style={{ fontSize: 11, color: "#444", marginBottom: 16, display: "flex", gap: 12, flexWrap: "wrap" }}>
         <span>Виннер =</span>
-        <span style={{ color: "#6EC8A0" }}>CPL ≤ €{TARGET_CPL}</span>
-        <span style={{ color: "#6EC8A0" }}>+ CPQL ≤ €{TARGET_CPQL}</span>
+        <span style={{ color: "#6EC8A0" }}>CPL ≤ ${TARGET_CPL}</span>
+        <span style={{ color: "#6EC8A0" }}>+ CPQL ≤ ${TARGET_CPQL}</span>
         <span style={{ color: "#6EC8A0" }}>+ ≥{MIN_IMP / 1000}K показов</span>
         <span style={{ color: "#333" }}>|</span>
         <span>С данными PBI: {counts.withCpl} из {counts.total}</span>

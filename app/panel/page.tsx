@@ -84,7 +84,7 @@ function MetricCell({ value, target, lower = true }: { value: number | null; tar
   const good = lower ? value <= target : value >= target;
   const warn = lower ? value <= target * 1.3 : value >= target * 0.8;
   const color = good ? "#6EC8A0" : warn ? "#E8AA42" : "#D96B6B";
-  return <span style={{ color, fontWeight: 700 }}>€{fmt(value)}</span>;
+  return <span style={{ color, fontWeight: 700 }}>${fmt(value)}</span>;
 }
 
 export default function PanelPage() {
@@ -441,15 +441,15 @@ export default function PanelPage() {
             Плановые метрики
           </div>
           <div>
-            <span style={{ fontSize: 20, fontWeight: 800, color: "#E8AA42" }}>≤ €{TARGET_CPL}</span>
+            <span style={{ fontSize: 20, fontWeight: 800, color: "#E8AA42" }}>≤ ${TARGET_CPL}</span>
             <span style={{ fontSize: 11, color: "#777", marginLeft: 6 }}>CPL</span>
           </div>
           <div>
-            <span style={{ fontSize: 20, fontWeight: 800, color: "#E8AA42" }}>≤ €{TARGET_CPQL}</span>
+            <span style={{ fontSize: 20, fontWeight: 800, color: "#E8AA42" }}>≤ ${TARGET_CPQL}</span>
             <span style={{ fontSize: 11, color: "#777", marginLeft: 6 }}>CPQL</span>
           </div>
           <div style={{ fontSize: 11, color: "#555" }}>
-            Виннер = CPL ≤ {TARGET_CPL}€ + CPQL ≤ {TARGET_CPQL}€ + 8 000 показов
+            Виннер = CPL ≤ {TARGET_CPL}$ + CPQL ≤ {TARGET_CPQL}$ + 8 000 показов
           </div>
         </div>
       </Card>
@@ -542,7 +542,7 @@ export default function PanelPage() {
                 </div>
               </div>
               <div style={{ fontSize: 11, color: "#555" }}>
-                Порог: CPL &gt; €40 при 2000+ показах
+                Порог: CPL &gt; $40 при 2000+ показах
               </div>
               <button onClick={() => setEarlyStopResult(null)} style={{ marginLeft: "auto", background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: 16 }}>✕</button>
             </div>
@@ -556,7 +556,7 @@ export default function PanelPage() {
                     border: "1px solid rgba(217,107,107,0.15)",
                   }}>
                     <div style={{ fontSize: 11, fontWeight: 700, color: "#CCC", fontFamily: "monospace", flex: 1 }}>{ad.adName}</div>
-                    <span style={{ fontSize: 11, color: "#D96B6B" }}>CPL €{ad.cpl.toFixed(1)}</span>
+                    <span style={{ fontSize: 11, color: "#D96B6B" }}>CPL ${ad.cpl.toFixed(1)}</span>
                     <span style={{ fontSize: 11, color: "#555" }}>{ad.impressions.toLocaleString()} показов</span>
                     {ad.flow && <Badge color={ad.flow === "com" ? "#E8AA42" : "#48B8D0"}>{ad.flow.toUpperCase()}</Badge>}
                     <span style={{ fontSize: 11, fontWeight: 700, color: "#E8AA42" }}>⚠ Остановить вручную</span>
@@ -719,11 +719,11 @@ export default function PanelPage() {
                     <td style={{ padding: "10px 14px" }}>
                       <Badge color={row.flow === "com" ? "#E8AA42" : "#48B8D0"}>{row.flow?.toUpperCase() ?? "—"}</Badge>
                     </td>
-                    <td style={{ padding: "10px 14px", color: "#AAA" }}>€{fmt(row.spend)}</td>
+                    <td style={{ padding: "10px 14px", color: "#AAA" }}>${fmt(row.spend)}</td>
                     <td style={{ padding: "10px 14px", color: "#AAA" }}>{row.impressions?.toLocaleString() ?? "—"}</td>
                     <td style={{ padding: "10px 14px", color: "#AAA" }}>{row.clicks?.toLocaleString() ?? "—"}</td>
                     <td style={{ padding: "10px 14px", color: "#AAA" }}>{fmt(row.ctr)}%</td>
-                    <td style={{ padding: "10px 14px", color: "#AAA" }}>€{fmt(row.cpm)}</td>
+                    <td style={{ padding: "10px 14px", color: "#AAA" }}>${fmt(row.cpm)}</td>
                     <td style={{ padding: "10px 14px", whiteSpace: "nowrap" }}>
                       {row.hookRate != null ? (() => { const b = hookBand(row.hookRate); return <span title={`${b.label} (шкала 3-сек hook rate)`} style={{ color: b.color, fontWeight: 700 }}>{fmt(row.hookRate, 1)}% <span style={{ fontSize: 9, opacity: 0.85 }}>{b.label}</span></span>; })() : <span style={{ color: "#444" }}>—</span>}
                     </td>
@@ -778,11 +778,11 @@ export default function PanelPage() {
                       <td style={{ padding: "8px 14px", color: "#6EC8A0", fontWeight: 700 }}>{r.leads}</td>
                       <td style={{ padding: "8px 14px", color: "#C490D1", fontWeight: 700 }}>{r.qualLeads}</td>
                       <td style={{ padding: "8px 14px", color: "#AAA" }}>{r.cr != null ? `${fmt(r.cr, 1)}%` : "—"}</td>
-                      <td style={{ padding: "8px 14px", color: "#AAA" }}>€{fmt(r.spend, 0)}</td>
+                      <td style={{ padding: "8px 14px", color: "#AAA" }}>${fmt(r.spend, 0)}</td>
                       <td style={{ padding: "8px 14px" }}><MetricCell value={r.cpl} target={TARGET_CPL} /></td>
                       <td style={{ padding: "8px 14px" }}><MetricCell value={r.cpql} target={TARGET_CPQL} /></td>
                       <td style={{ padding: "8px 14px", color: r.revenue > 0 ? "#6EC8A0" : "#555" }}>
-                        {r.revenue > 0 ? `€${fmt(r.revenue, 0)}` : "—"}
+                        {r.revenue > 0 ? `$${fmt(r.revenue, 0)}` : "—"}
                       </td>
                     </tr>
                   ))}
@@ -817,7 +817,7 @@ export default function PanelPage() {
                           <div style={{ flex: 1, height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
                             <div style={{ height: "100%", width: `${(item.spend / maxSpend) * 100}%`, background: color, borderRadius: 2 }} />
                           </div>
-                          <span style={{ fontSize: 11, color: "#888", minWidth: 60, textAlign: "right" }}>€{item.spend.toFixed(0)}</span>
+                          <span style={{ fontSize: 11, color: "#888", minWidth: 60, textAlign: "right" }}>${item.spend.toFixed(0)}</span>
                           <span style={{ fontSize: 10, color: "#555", minWidth: 50, textAlign: "right" }}>{item.impressions.toLocaleString()}</span>
                           <span style={{ fontSize: 10, color: "#555", minWidth: 40, textAlign: "right" }}>{(item.ctr ?? 0).toFixed(2)}%</span>
                         </div>

@@ -69,7 +69,7 @@ export default function Dashboard() {
             <Stat label="Активных объявлений" value={live.totalAds} />
             <Stat label="Виннеров" value={live.winners} color="#6EC8A0" />
             <Stat label="Лузеров" value={live.losers} color="#D96B6B" />
-            <Stat label="Общий спенд" value={`€${live.totalSpend.toFixed(0)}`} color="#E8AA42" />
+            <Stat label="Общий спенд" value={`$${live.totalSpend.toFixed(0)}`} color="#E8AA42" />
           </div>
           {live.totalAds === 0 && (
             <div style={{ marginTop: 12, fontSize: 12, color: "#444" }}>

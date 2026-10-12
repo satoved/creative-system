@@ -63,7 +63,7 @@ function blendedCpl(spend: number, leads: number): number | null {
 
 // Семьи: член может задавать best/worst CPL только при достаточном объёме лидов.
 // Планка = 5: совпадает с порогом значимости view для риск-сигнала low_qual_cr
-// (leads >= 5). Эмпирически 3→5 убирает «худшие» выбросы на 3-4 лидах (€374/€272)
+// (leads >= 5). Эмпирически 3→5 убирает «худшие» выбросы на 3-4 лидах ($374/$272)
 // без потери семей; 10 уже режет покрытие низкообъёмных/свежих адов без выигрыша.
 const MIN_FAMILY_LEADS = 5;
 
@@ -310,7 +310,7 @@ export async function GET() {
       // Only include if >= 2 different values of the varying param
       const uniqueVals = new Set(groupAds.map(a => config.getCode(a)).filter(Boolean));
       if (uniqueVals.size < 2) continue;
-      // Only include members with spend >= €20
+      // Only include members with spend >= $20
       const qualifiedAds = groupAds.filter(a => a.spend >= 20);
       if (qualifiedAds.length < 2) continue;
       if (new Set(qualifiedAds.map(a => config.getCode(a)).filter(Boolean)).size < 2) continue;
