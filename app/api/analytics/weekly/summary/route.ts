@@ -4,6 +4,7 @@ import { createServiceClient } from "@/lib/supabase";
 import { getAiContext } from "@/lib/brief";
 import type { WeeklyCreativeRow } from "../route";
 import type { CreativeParams } from "@/lib/gemini";
+import { brief } from "@/brief.config";
 
 // Сводный разбор недели: объективные агрегаты (в коде) + Claude синтезирует
 // паттерны по извлечённым параметрам (какие хуки/энглы/персоны зашли, что штормить).
@@ -96,7 +97,7 @@ ${topCpl.map(line).join("\n")}
 ХУДШИЕ по CPL:
 ${botCpl.map(line).join("\n")}`;
 
-  const system = `Ты — head of growth в SternMeister (курс «Бухгалтер в Германии»). ${getAiContext()}
+  const system = `Ты — head of growth в ${brief.business.name}. ${getAiContext()}
 
 Тебе дают объективные цифры недели по рекламным крео и (где разобрано) параметры их содержания. Сделай СВОДНЫЙ разбор недели на уровне всей пачки — основу для мозгового штурма новых крео. Не пересказывай цифры построчно, а найди ПАТТЕРНЫ.`;
 

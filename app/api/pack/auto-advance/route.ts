@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
   }
 
   const proto = req.headers.get("x-forwarded-proto") ?? "https";
-  const host  = req.headers.get("host") ?? "creative.sternmeister.de";
+  const host  = req.headers.get("host") ?? "localhost:3000";
   const baseUrl = `${proto}://${host}`;
 
   type StageAction = "polling_kling" | "voicing" | "stitching" | "polling_creatomate" | "ready_montage" | "awaiting_montage" | "skip";

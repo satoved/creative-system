@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase";
 import type { WeeklyCreativeRow } from "../route";
+import { brief } from "@/brief.config";
 
 const key = (s: string) => s.trim().toLowerCase();
 const fmt = (n: number | null | undefined, d = 2) => (n == null ? "—" : n.toFixed(d));
@@ -59,7 +60,7 @@ export async function POST(req: NextRequest) {
     `Hook rate ${fmt(row.hookRate, 1)}%`, `Hold rate ${fmt(row.holdRate, 1)}%`, `Статус: ${row.status}`,
   ].join(" · ");
 
-  const prompt = `Ты — медиабайер SternMeister (курс «Бухгалтер в Германии»). Дай КОРОТКИЙ (3-5 предложений) субъективный разбор креатива за прошлую неделю: что сработало/не сработало, гипотеза почему, что попробовать дальше. Пиши по-русски, без воды, конкретно по цифрам.
+  const prompt = `Ты — медиабайер в ${brief.business.name} (${brief.business.product}). Дай КОРОТКИЙ (3-5 предложений) субъективный разбор креатива за прошлую неделю: что сработало/не сработало, гипотеза почему, что попробовать дальше. Пиши по-русски, без воды, конкретно по цифрам.
 
 Креатив: ${row.adName} (формат ${row.format ?? "?"}, поток ${row.flow ?? "?"}).
 Метрики: ${metrics}.

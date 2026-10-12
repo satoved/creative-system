@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
   const personaName = new Map((personas ?? []).map(p => [p.id, p.name as string]));
 
   const proto = req.headers.get("x-forwarded-proto") ?? "https";
-  const host  = req.headers.get("host") ?? "creative.sternmeister.de";
+  const host  = req.headers.get("host") ?? "localhost:3000";
   const baseUrl = `${proto}://${host}`;
 
   // static → одна картинка; video* → многосценное видео (Kling + stitch)

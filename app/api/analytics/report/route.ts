@@ -35,7 +35,7 @@ interface PerfRow {
 }
 
 function baseUrlFrom(req: NextRequest): string {
-  const host = req.headers.get("host") ?? "creative.sternmeister.de";
+  const host = req.headers.get("host") ?? "localhost:3000";
   const proto = req.headers.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
   return `${proto}://${host}`;
 }

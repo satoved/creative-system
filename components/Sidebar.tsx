@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
+import { brief } from "@/brief.config";
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: "◈" },
@@ -54,7 +55,7 @@ export default function Sidebar() {
     }}>
       <div style={{ padding: "0 8px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ fontSize: 9, letterSpacing: 4, textTransform: "uppercase", color: "#E8AA42", fontWeight: 700, marginBottom: 4 }}>
-          STERNMEISTER
+          {brief.business.name}
         </div>
         <div style={{ fontSize: 13, fontWeight: 800, color: "#E2E0DB" }}>Creative System</div>
       </div>

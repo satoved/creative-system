@@ -4,6 +4,7 @@ import { createServiceClient } from "@/lib/supabase";
 import { getAiContext } from "@/lib/brief";
 import type { WeeklyCreativeRow } from "../route";
 import type { CreativeParams } from "@/lib/gemini";
+import { brief } from "@/brief.config";
 
 // Итоговый документ «Что делаем»: Claude сводит ту-ду + разбор недели + шторм +
 // параметры крео в ОДИН структурный документ направлений на следующую пачку,
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
     return `- ЧТО ДЕЛАЕМ: ${todo.trim()}\n    крео: ${meta}${par}${subj}`;
   }).join("\n");
 
-  const system = `Ты — креативный продюсер SternMeister (курс «Бухгалтер в Германии»). ${getAiContext()}
+  const system = `Ты — креативный продюсер в ${brief.business.name}. ${getAiContext()}
 
 Тебе дают решения команды по крео за неделю («что делаем»), их разбор параметров и метрики, плюс сводный разбор недели. Собери ЕДИНЫЙ документ направлений на следующую пачку крео — так, чтобы из каждого направления продюсер мог написать ТЗ на съёмку/монтаж. Сгруппируй по смыслу (не переписывай список построчно), убери дубли, дай приоритет по потенциалу.`;
 

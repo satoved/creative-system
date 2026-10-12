@@ -63,7 +63,7 @@ async function mcpConnect(): Promise<{ sse: SseReader; sessionUrl: string }> {
   await rpc(sessionUrl, 1, "initialize", {
     protocolVersion: "2024-11-05",
     capabilities: {},
-    clientInfo: { name: "sternmeister-sync", version: "1.0.0" },
+    clientInfo: { name: "creative-system-sync", version: "1.0.0" },
   });
   await sse.next(); // consume initialize response
   await rpc(sessionUrl, 0, "notifications/initialized", {});

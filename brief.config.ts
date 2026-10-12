@@ -104,64 +104,53 @@ export interface BriefConfig {
 
 export const brief: BriefConfig = {
   business: {
-    name: "SternMeister",
-    product: "Онлайн-курс «Бухгалтер в Германии» — 7 месяцев, сертификат DEKRA, на русском",
-    language: "ru",
-    audience: "Русскоязычные иммигранты в Германии, ищущие работу",
+    name: "Annuity Educator",
+    product: "Lead generation for annuities: we run Meta ads that attract retirees interested in annuities, then pass the leads to partner agents who handle the sale",
+    language: "en",
+    audience: "US retirees and pre-retirees who may be interested in buying an annuity",
   },
 
   ai_context: `
-SternMeister — онлайн-школа бухгалтерии для русскоязычных иммигрантов в Германии.
-Продукт: курс «Бухгалтер в Германии», 7 месяцев, сертификат DEKRA, обучение на русском языке.
+Annuity Educator is a lead-generation business. We run Meta ads aimed at retirees who might want to buy an annuity.
+We do NOT sell annuities ourselves. Our product is the lead: a person who raised their hand and left contact details.
+Leads are handed over to partner agents, who contact them and do the actual selling.
 
-Два потока лидов:
-• COM (коммерческие) — платят сами, проблемный сегмент, CPQL стабильно выше плана.
-• GOV (госники) — получают Bildungsgutschein через Jobcenter, государство платит.
-
-Команда говорит по-русски, креативы на русском, посадочные на русском.
-Целевая — иммигранты, часто без опыта работы в Германии, ищущие стабильную профессию.
+Goal of every creative: get the right person to submit the lead form, and keep lead quality high
+(leads that the partners can actually reach and talk to), not just drive cheap clicks.
+Audience: retirees and people close to retirement. Content language: English only.
+Metrics: CPL (cost per lead) and CPQL (cost per qualified lead).
   `.trim(),
 
   flows: [
     {
-      code: "com",
-      label: "Коммерческий",
-      description: "Платят сами",
-      meta_account_env: "META_AD_ACCOUNT_ID_COM",
-    },
-    {
-      code: "gov",
-      label: "Госники",
-      description: "Bildungsgutschein через Jobcenter",
-      meta_account_env: "META_AD_ACCOUNT_ID_GOV",
+      code: "main",
+      label: "Main",
+      description: "Single Meta ad account (Annuity Educator_1)",
+      meta_account_env: "META_AD_ACCOUNT_ID_MAIN",
     },
   ],
 
   funnel: {
     stages: ["lead", "qual_lead", "transaction"],
-    cycle_days_min: 14,
+    cycle_days_min: 7,
     cycle_days_max: 30,
   },
 
   creative_matrix: {
     params: [
-      { key: "persona", letter: "P", label: "Персона", color: "#48B8D0" },
-      { key: "hook",    letter: "H", label: "Хук",     color: "#C490D1" },
-      { key: "body",    letter: "B", label: "Боди",    color: "#6EC8A0" },
-      { key: "angle",   letter: "A", label: "Энгл",    color: "#FF8B5A" },
+      { key: "persona", letter: "P", label: "Persona", color: "#48B8D0" },
+      { key: "hook",    letter: "H", label: "Hook",    color: "#C490D1" },
+      { key: "body",    letter: "B", label: "Body",    color: "#6EC8A0" },
+      { key: "angle",   letter: "A", label: "Angle",   color: "#FF8B5A" },
     ],
     formats: ["UGC", "STATIC", "ANIMATION", "HUMAN", "MIXED"],
     name_pattern_template: "P{n}-H{n}-B{n}-A{n}-FORMAT-FLOW",
   },
 
   brand_voice: {
-    tone: "Прямой, с конкретными примерами из жизни. Без воды и обещаний быстрого результата.",
+    tone: "Clear, respectful and plain-spoken; no hype.",
     forbidden_words: [],
-    style_notes: "Можно использовать немецкие термины (Steuer, Jobcenter, Bildungsgutschein) — целевая знакома с ними. Не использовать сленг и анекдоты.",
-    dialogue_rules: [
-      "В диалогах писать «ШтернМастер», не «SternMeister» — это правильное произношение",
-      "DATEV произносится как «дАтэв» (ударение на первый слог) — пишем именно «дАтэв» в диалогах",
-      "Без длинных тире в репликах — Higgsfield/voice-генерация плохо их обрабатывает",
-    ],
+    style_notes: "Write for retirees: simple words, no jargon. Do not promise guaranteed returns or specific income.",
+    dialogue_rules: [],
   },
 };

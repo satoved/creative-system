@@ -68,7 +68,7 @@ const FORMAT_VALUES = brief.creative_matrix.formats.map(f => f.toUpperCase());
 /**
  * Разбирает имя объявления и извлекает коды параметров.
  * Формат и список параметров задаются в brief.config.ts.
- * Пример (SternMeister): P2-H1-B3-A5-UGC-COM
+ * Пример: P2-H1-B3-A5-UGC-MAIN
  */
 export function parseAdName(adName: string): AdNameParts {
   const parts = adName.toUpperCase().split(/[-_\s]+/);
