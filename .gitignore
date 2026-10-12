@@ -73,3 +73,6 @@ competitor-analysis-prompt.md
 creative-system-excalidraw.excalidraw
 supabase/.temp/
 supabase/.branches/
+
+# supabase CLI local link state
+supabase/.temp/

@@ -5,7 +5,7 @@
 -- ── creative_generations — результаты Higgsfield генерации ───
 
 create table if not exists creative_generations (
-  id                uuid primary key default uuid_generate_v4(),
+  id                uuid primary key default gen_random_uuid(),
   brief_id          uuid references briefs(id) on delete set null,
   session_id        uuid references constructor_sessions(id) on delete set null,
   format            text not null default 'ugc',

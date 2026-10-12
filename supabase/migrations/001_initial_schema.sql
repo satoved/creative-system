@@ -21,7 +21,7 @@ create type brief_status as enum ('pending', 'approved', 'needs_revision');
 -- ============================================================
 
 create table personas (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   code        text unique,                    -- P1, P2, P3 ...
   flow        ad_flow not null default 'com', -- com / gov
   name        text not null,
@@ -38,7 +38,7 @@ create table personas (
 );
 
 create table hooks (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   code        text unique,                    -- H1, H2, H3 ...
   flow        ad_flow not null default 'com',
   name        text not null,
@@ -50,7 +50,7 @@ create table hooks (
 );
 
 create table bodies (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   code        text unique,                    -- B1, B2, B3 ...
   flow        ad_flow not null default 'com',
   name        text not null,
@@ -62,7 +62,7 @@ create table bodies (
 );
 
 create table angles (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   code        text unique,                    -- A1, A2, A3 ...
   flow        ad_flow not null default 'com',
   name        text not null,
@@ -75,7 +75,7 @@ create table angles (
 
 -- ── Rules ────────────────────────────────────────────────────
 create table rules (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   title       text not null,
   content     text not null,
   category    rule_category not null default 'general',
@@ -88,7 +88,7 @@ create table rules (
 -- ============================================================
 
 create table constructor_sessions (
-  id                  uuid primary key default uuid_generate_v4(),
+  id                  uuid primary key default gen_random_uuid(),
   name                text not null,
   flow                ad_flow not null default 'com',
   selected_personas   uuid[] default '{}',
@@ -102,7 +102,7 @@ create table constructor_sessions (
 );
 
 create table scenarios (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   param_type  text not null check (param_type in ('persona','hook','body','angle')),
   param_id    uuid not null,
   content     text not null,
@@ -112,7 +112,7 @@ create table scenarios (
 );
 
 create table briefs (
-  id            uuid primary key default uuid_generate_v4(),
+  id            uuid primary key default gen_random_uuid(),
   session_id    uuid references constructor_sessions(id) on delete cascade,
   persona_id    uuid references personas(id),
   hook_id       uuid references hooks(id),
@@ -134,7 +134,7 @@ create table briefs (
 -- ============================================================
 
 create table creatives (
-  id              uuid primary key default uuid_generate_v4(),
+  id              uuid primary key default gen_random_uuid(),
   source          creative_source default 'internal',
   flow            ad_flow not null default 'com',
   persona_id      uuid references personas(id),
@@ -159,7 +159,7 @@ create table creatives (
 -- ============================================================
 
 create table meta_ads (
-  id            uuid primary key default uuid_generate_v4(),
+  id            uuid primary key default gen_random_uuid(),
   ad_id         text not null,               -- Meta ad ID
   ad_name       text not null,               -- P2-H1-B3-A5-UGC-COM
   adset_id      text,
@@ -187,7 +187,7 @@ create index idx_meta_ads_flow on meta_ads(flow);
 
 -- ── Sync log ─────────────────────────────────────────────────
 create table meta_sync_log (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   account_id  text not null,
   synced_at   timestamptz default now(),
   date_from   date,
@@ -202,7 +202,7 @@ create table meta_sync_log (
 -- ============================================================
 
 create table pbi_metrics (
-  id            uuid primary key default uuid_generate_v4(),
+  id            uuid primary key default gen_random_uuid(),
   ad_id         text not null,               -- Meta ad ID (ключ связи)
   ad_name       text,
   date          date not null,
@@ -218,7 +218,7 @@ create index idx_pbi_metrics_date on pbi_metrics(date);
 
 -- ── PBI sync log ─────────────────────────────────────────────
 create table pbi_sync_log (
-  id        uuid primary key default uuid_generate_v4(),
+  id        uuid primary key default gen_random_uuid(),
   synced_at timestamptz default now(),
   rows_count int default 0,
   status    text default 'ok',
@@ -294,7 +294,7 @@ group by m.ad_id, m.ad_name, m.flow, m.campaign_id, m.campaign_name, m.adset_id,
 -- ============================================================
 
 create table creative_alerts (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   ad_id       text,
   ad_name     text,
   flow        ad_flow,
@@ -311,7 +311,7 @@ create table creative_alerts (
 -- ============================================================
 
 create table competitor_concepts (
-  id            uuid primary key default uuid_generate_v4(),
+  id            uuid primary key default gen_random_uuid(),
   source        text default 'google_sheets',
   concept_type  text,                         -- hook / angle / format / persona
   title         text not null,

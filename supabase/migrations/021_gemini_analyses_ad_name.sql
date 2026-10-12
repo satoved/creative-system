@@ -6,5 +6,16 @@
 -- mode='creative_desc' — отличает батч-описания от ручных winner/loser-разборов.
 -- ============================================================
 
+-- Таблица использовалась кодом, но ни одна миграция её не создавала.
+create table if not exists gemini_analyses (
+  id          uuid primary key default gen_random_uuid(),
+  mode        text not null,
+  analysis    text not null,
+  winner_name text,
+  loser_name  text,
+  file_name   text,
+  created_at  timestamptz not null default now()
+);
+
 alter table gemini_analyses add column if not exists ad_name text;
 create index if not exists idx_gemini_analyses_ad_name on gemini_analyses (lower(btrim(ad_name)));
