@@ -37,7 +37,7 @@ if (!SUPABASE_URL || !SERVICE_KEY || !META_TOKEN || !GEMINI_KEY) {
 }
 
 const GRAPH       = "https://graph.facebook.com/v21.0";
-const GEMINI_GEN  = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+const GEMINI_GEN  = `https://generativelanguage.googleapis.com/v1beta/models/${process.env.GEMINI_MODEL ?? "gemini-3.8-flash"}:generateContent`;
 const FILES_API   = "https://generativelanguage.googleapis.com/upload/v1beta/files";
 
 const argv = process.argv.slice(2);

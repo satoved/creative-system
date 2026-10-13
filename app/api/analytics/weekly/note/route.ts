@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase";
 import type { WeeklyCreativeRow } from "../route";
 import { brief } from "@/brief.config";
+import { GEMINI_MODEL } from "@/lib/gemini";
 
 const key = (s: string) => s.trim().toLowerCase();
 const fmt = (n: number | null | undefined, d = 2) => (n == null ? "—" : n.toFixed(d));
@@ -70,7 +71,7 @@ ${desc ? `Содержание крео (авторазбор): ${desc}` : ""}`;
   let aiNote = "";
   try {
     const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${geminiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

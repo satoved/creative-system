@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 export const maxDuration = 120;
 import { createServiceClient } from "@/lib/supabase";
 import { getAiContext, getBusiness } from "@/lib/brief";
+import { GEMINI_MODEL } from "@/lib/gemini";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 export async function POST() {
   const supabase = createServiceClient();

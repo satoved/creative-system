@@ -4,7 +4,9 @@ import { getAiContext } from "@/lib/brief";
 // Используется батч-разбором креативов (/api/gemini/batch).
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+// gemini-2.5-flash закрыта для новых ключей → по умолчанию 3.8; можно переопределить env GEMINI_MODEL.
+export const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.8-flash";
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const FILES_API = "https://generativelanguage.googleapis.com/upload/v1beta/files";
 const META_TOKEN = process.env.META_ACCESS_TOKEN!;
 
@@ -105,7 +107,7 @@ export async function describeCreative(assetUrl: string): Promise<string> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contents: [{ parts: [{ text: DESC_PROMPT }, { file_data: { mime_type: mimeType, file_uri: fileUri } }] }],
-      // На видео gemini-2.5-flash тратит много на "thinking" → даём большой бюджет и
+      // На видео Gemini тратит много на "thinking" → даём большой бюджет и
       // отключаем thinking, чтобы output не обрезался на 1-й секции (был баг: 270 симв).
       generationConfig: { temperature: 0.3, maxOutputTokens: 8192, thinkingConfig: { thinkingBudget: 0 } },
     }),

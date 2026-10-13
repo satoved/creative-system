@@ -18,6 +18,7 @@ import type {
   ReportKpi, ReportVisual, ReportSignal, ReportHookSignal, ReportFamily, ReportCombo, ReportCompetitor,
   ReportVerification, ReportVerifications,
 } from "@/lib/types";
+import { GEMINI_MODEL } from "@/lib/gemini";
 
 export const maxDuration = 120;
 
@@ -425,7 +426,7 @@ async function verifyWithGemini(ctx: string): Promise<ReportVerification> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return { model: "gemini", status: "skipped", confidence: 0, issues: [], summary: "GEMINI_API_KEY не задан" };
   try {
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
