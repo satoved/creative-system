@@ -20,7 +20,9 @@ import type {
 } from "@/lib/types";
 import { GEMINI_MODEL } from "@/lib/gemini";
 
-export const maxDuration = 120;
+export const maxDuration = 300;
+// Проверки Gemini/Codex вторичны: не даём зависшей модели съесть весь лимит функции.
+const VERIFY_TIMEOUT_MS = 45_000;
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -433,6 +435,7 @@ async function verifyWithGemini(ctx: string): Promise<ReportVerification> {
         contents: [{ parts: [{ text: `${AUDIT_INSTRUCTION}\n\n${ctx}` }] }],
         generationConfig: { temperature: 0, responseMimeType: "application/json" },
       }),
+      signal: AbortSignal.timeout(VERIFY_TIMEOUT_MS),
     });
     if (!r.ok) return { model: "gemini", status: "error", confidence: 0, issues: [], summary: `Gemini HTTP ${r.status}` };
     const j = await r.json() as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
@@ -454,6 +457,7 @@ async function verifyWithCodex(ctx: string): Promise<ReportVerification> {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
       body: JSON.stringify({ model, instructions: AUDIT_INSTRUCTION, input: ctx }),
+      signal: AbortSignal.timeout(VERIFY_TIMEOUT_MS),
     });
     if (!r.ok) return { model: "codex", status: "error", confidence: 0, issues: [], summary: `OpenAI HTTP ${r.status}` };
     const j = await r.json() as { output?: { content?: { type?: string; text?: string }[] }[] };
