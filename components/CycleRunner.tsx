@@ -44,8 +44,15 @@ export default function CycleRunner() {
       set("sync", "run", "Meta…");
       await post("/api/meta/sync");
       set("sync", "run", "Elly…");
-      await post("/api/pbi/elly-sync");
-      set("sync", "done");
+      let ellySkipped = false;
+      try {
+        await post("/api/pbi/elly-sync");
+      } catch (e) {
+        // Elly — опциональная интеграция: без ключа пропускаем шаг, цикл идёт дальше.
+        if (!(e instanceof Error && e.message.includes("not configured"))) throw e;
+        ellySkipped = true;
+      }
+      set("sync", "done", ellySkipped ? "Meta ✓, Elly не подключён — пропущено" : undefined);
 
       // 2. Маппинг
       set("map", "run");
