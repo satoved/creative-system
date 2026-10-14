@@ -123,15 +123,18 @@ export async function POST(req: NextRequest) {
   // ── Лиды/квал за ИМЕННО ЭТО ОКНО — из Plurio (дневной истории в БД нет) ──
   // Meta = per-AdId, Google (PMax) = per-CampaignName; джойн к meta_ads по имени.
   // Meta обязателен (падаем при ошибке); Google опционален (может не быть лидов).
-  let ellyRows: Awaited<ReturnType<typeof syncElly>>;
-  try {
-    const [meta, google] = await Promise.all([
-      syncElly(weekStart, weekEnd, "meta"),
-      syncElly(weekStart, weekEnd, "google").catch(() => []),
-    ]);
-    ellyRows = [...meta, ...google];
-  } catch (e) {
-    return NextResponse.json({ error: `Elly: ${e instanceof Error ? e.message : String(e)}` }, { status: 502 });
+  let ellyRows: Awaited<ReturnType<typeof syncElly>> = [];
+  // Plurio опционален: без ключа лидов нет (CPL/CPQL не считаются), но Meta-метрики собираем.
+  if (process.env.PLURIO_API_KEY) {
+    try {
+      const [meta, google] = await Promise.all([
+        syncElly(weekStart, weekEnd, "meta"),
+        syncElly(weekStart, weekEnd, "google").catch(() => []),
+      ]);
+      ellyRows = [...meta, ...google];
+    } catch (e) {
+      return NextResponse.json({ error: `Elly: ${e instanceof Error ? e.message : String(e)}` }, { status: 502 });
+    }
   }
 
   const cplTarget  = Number(settingsRes.data?.cpl_target ?? 20);
